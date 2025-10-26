@@ -23,19 +23,19 @@ jobs:
       - run: uvicorn app.main:app --host 0.0.0.0 --port 8080 &
       - run: timeout 20 bash -c 'until curl -sf http://localhost:8080/healthz; do sleep 1; done'
 
-      - name: ZAP Baseline (write directly to mounted dir)
+      - name: ZAP Baseline (write to /zap/wrk)
         run: |
           set -euxo pipefail
           docker run --rm --network host \
-            -v "${{ github.workspace }}/EVIDENCE/S11:/zap/reports" \
+            -v "${{ github.workspace }}/EVIDENCE/S11:/zap/wrk" \
             zaproxy/zap-stable \
             /zap/zap-baseline.py \
               -t http://localhost:8080 \
-              -r /zap/reports/zap_baseline.html \
-              -J /zap/reports/zap_baseline.json \
+              -r zap_baseline.html \
+              -J zap_baseline.json \
               -d
           ls -la EVIDENCE/S11
-
+      
       - name: Upload S11 evidence
         uses: actions/upload-artifact@v4
         with:
