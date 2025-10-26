@@ -24,15 +24,8 @@ jobs:
 
       - name: ZAP Baseline
         run: |
-          docker run --rm --network host \
-            -v ${{ github.workspace }}:/zap/wrk \
-            zaproxy/zap-stable \
-            /zap/zap-baseline.py -t http://localhost:8080 \
-            -r /zap/wrk/EVIDENCE/S11/zap_baseline.html \
-            -J /zap/wrk/EVIDENCE/S11/zap_baseline.json \
-            -d || true
-      
-          ls -la EVIDENCE/S11 || true
+          docker run --rm --network host -v $PWD:/zap/wrk owasp/zap2docker-stable   zap-full-scan.py -t http://localhost:8080 -r zap_full.html -J zap_full.json -d
+          mv zap_full.* EVIDENCE/S11/
 
       - uses: actions/upload-artifact@v4
         with:
