@@ -28,9 +28,11 @@ jobs:
             -v ${{ github.workspace }}:/zap/wrk \
             zaproxy/zap-stable \
             /zap/zap-baseline.py -t http://localhost:8080 \
-            -r /zap/wrk/zap_baseline.html \
-            -J /zap/wrk/zap_baseline.json \
+            -r /zap/wrk/EVIDENCE/S11/zap_baseline.html \
+            -J /zap/wrk/EVIDENCE/S11/zap_baseline.json \
             -d || true
+
+      - run: ls -la EVIDENCE/S11 || true
 
       - uses: actions/upload-artifact@v4
         with:
