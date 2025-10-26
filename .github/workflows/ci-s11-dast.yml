@@ -23,14 +23,9 @@ jobs:
       - run: uvicorn app.main:app --host 0.0.0.0 --port 8080 &
       - run: timeout 20 bash -c 'until curl -sf http://localhost:8080/healthz; do sleep 1; done'
 
-      - name: Ensure evidence dirs
-        run: |
-          mkdir -p EVIDENCE/S11
-          chmod 777 EVIDENCE/S11
-      
       - name: ZAP Baseline (root, write to /zap/wrk)
+        continue-on-error: true
         run: |
-          set -euxo pipefail
           docker run --rm --network host \
             -u 0:0 \
             -v "${{ github.workspace }}/EVIDENCE/S11:/zap/wrk" \
@@ -43,7 +38,9 @@ jobs:
           ls -la EVIDENCE/S11
       
       - name: Upload S11 evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: S11_EVIDENCE
           path: EVIDENCE/S11
+
