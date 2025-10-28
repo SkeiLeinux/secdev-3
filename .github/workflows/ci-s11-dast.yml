@@ -30,10 +30,10 @@ jobs:
             -u 0:0 \
             -v "${{ github.workspace }}/EVIDENCE/S11:/zap/wrk" \
             zaproxy/zap-stable \
-            /zap/zap-baseline.py \
+            /zap/zap-full-scan.py \
               -t http://localhost:8080 \
-              -r zap_baseline.html \
-              -J zap_baseline.json \
+              -r zap_full.html \
+              -J zap_full.json \
               -d
           ls -la EVIDENCE/S11
       
