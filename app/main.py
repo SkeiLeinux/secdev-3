@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.templating import Jinja2Templates
+from html import escape
 
 app = FastAPI()
 templates = Jinja2Templates(directory="app/templates")
@@ -20,5 +21,6 @@ def healthz():
 
 @app.get("/echo", response_class=HTMLResponse)
 def echo(x: str = ""):
+    safe_x = escape(x)
     # намеренно без экранирования - упрощённая цель для ZAP
-    return HTMLResponse(f"<h1>ECHO</h1><div>you said: {x}</div>")
+    return HTMLResponse(f"<h1>ECHO</h1><div>you said: {safe_x}</div>")
